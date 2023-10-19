@@ -7,7 +7,7 @@ const Login = {
       </div>
       <div class=login-container>
         <div class="login-wraper">
-            <form class="form" action="#/dashboard">
+            <form class="form">
               <h1>Login</h1>
               <label for="email">Email</label>
               <input type="text" placeholder="email" id="email" name="email">
@@ -24,32 +24,47 @@ const Login = {
   },
 
   async afterRender () {
-    const form = document.querySelector ('.form');
-    const msgLogin = document.querySelector ('.login-msg');
+    const form = document.querySelector('.form');
+    const msgLogin = document.querySelector('.login-msg');
     msgLogin.style.display = 'none';
-    msgLogin.classList.remove ('success');
-    form.addEventListener ('submit', async event => {
-      event.preventDefault ();
-      const formData = new FormData (form);
-      const data = Object.fromEntries (formData);
-
-      try {
-        const result = await BioskopSource.login (data);
-        console.log (result);
+    msgLogin.classList.remove('success');
+    document
+      .getElementById('btnLogin')
+      .addEventListener('click', async event => {
+        event.preventDefault();
+        const email = document.querySelector('#email').value;
+        const password = document.querySelector('#password').value;
+        const data = {
+          email: email,
+          password: password
+        };
+        const result = await BioskopSource.login(data);
 
         if (result.msg) {
           msgLogin.style.display = 'flex';
           return (msgLogin.innerHTML = `<h3>${result.msg}</h3>`);
         }
         msgLogin.style.display = 'flex';
-        msgLogin.classList.add ('success');
+        msgLogin.classList.add('success');
         msgLogin.innerHTML = `<h3>Login Berhasil</h3>`;
-        form.submit ();
-      } catch (error) {
-        console.log (error);
-      }
+        const id = result.admin.id;
+
+        // simpan id di local storage
+        const myObj = {
+          id: id
+        };
+        const myObj_string = JSON.stringify(myObj);
+        localStorage.setItem('simpan_id', myObj_string);
+
+        window.location.replace(`#/dashboard`);
+      });
+
+    // menampilkan navbar
+    const liHomeNav = document.querySelectorAll('.homeNav');
+    liHomeNav.forEach(item => {
+      item.style.display = 'flex';
     });
-  },
+  }
 };
 
 export default Login;

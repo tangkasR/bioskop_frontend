@@ -1,34 +1,51 @@
 import BioskopSource from '../../data/bioskop-source';
+import '../templates/itemSidebar';
 const Dashboard = {
   async render () {
     return `
           <div class=dashboard-container>
-            <button class="logout">Logout</button>
-            <h1>Dashboard Page</h1>
+            <sidebar-template></sidebar-template>
+            <div class=dashboard-content>
+              <div class="welcome-content">
+                <h1>Dashboard</h1>
+              </div>
+            </div>
           </div>
           `;
   },
 
   async afterRender () {
-    const liHomeNav = document.querySelectorAll ('.homeNav');
-    liHomeNav.forEach (item => {
-      item.style.display = 'none';
-    });
-    const btnLogout = document.querySelector ('.logout');
     try {
-      btnLogout.addEventListener ('click', async () => {
-        try {
-          const logout = await BioskopSource.logout ();
-          window.location.replace ('/');
-        } catch (error) {
-          console.log (error);
-        }
+      // get id admin
+      const id = JSON.parse(localStorage.simpan_id);
+
+      // menghilangkan navbar
+      const liHomeNav = document.querySelectorAll('.homeNav');
+      liHomeNav.forEach(item => {
+        item.style.display = 'none';
       });
-      console.log ('after render');
+
+      // eksekusi logout
+      const btnLogout = document.querySelector('.logout');
+      try {
+        btnLogout.addEventListener('click', async () => {
+          try {
+            const logout = BioskopSource.logout(id.id);
+            localStorage.removeItem('simpan_id');
+            console.log(logout);
+            window.location.replace('#/login');
+          } catch (error) {
+            console.log(error);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     } catch (error) {
-      console.log (error);
+      alert('Login terlebih dahulu');
+      window.location.replace('#/login');
     }
-  },
+  }
 };
 
 export default Dashboard;

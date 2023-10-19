@@ -1,17 +1,17 @@
 class Navbar extends HTMLElement {
   constructor () {
-    super ();
+    super();
   }
 
   connectedCallback () {
-    this.render ();
+    this.render();
   }
 
   render () {
     this.innerHTML = `
         <nav>
             <div class="navbar-img">
-                <img src="" alt="logo" class="img">
+                <img src="./logo.png" alt="logo" class="img">
             </div>
             <ul>
                 <li class="homeNav"><a href="#">Home</a></li>
@@ -23,4 +23,4 @@ class Navbar extends HTMLElement {
   }
 }
 
-customElements.define ('navbar-template', Navbar);
+customElements.define('navbar-template', Navbar);

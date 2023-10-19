@@ -7,7 +7,7 @@ const Register = {
         </div>
         <div class=register-container>
           <div class="register-wraper">
-            <form class="form" action="#/login">
+            <form class="form">
               <h1>Registrasi</h1>
               <label for="Name">Nama</label>
               <input type="text" placeholder="Nama" id="Name" name="name">
@@ -28,31 +28,32 @@ const Register = {
   },
 
   afterRender () {
-    const form = document.querySelector ('.form');
-    const msgRegis = document.querySelector ('.register-msg');
+    const form = document.querySelector('.form');
+    const msgRegis = document.querySelector('.register-msg');
     msgRegis.style.display = 'none';
-    form.addEventListener ('submit', async event => {
-      event.preventDefault ();
-      const formData = new FormData (form);
-      const data = Object.fromEntries (formData);
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData);
 
       try {
-        const result = await BioskopSource.register (data);
-        console.log (data);
+        const result = await BioskopSource.register(data);
+        console.log(data);
         if (result.msg) {
-          msgRegis.classList.remove ('success');
+          msgRegis.classList.remove('success');
           msgRegis.style.display = 'flex';
           return (msgRegis.innerHTML = `<h3>${result.msg}</h3>`);
         }
         msgRegis.style.display = 'flex';
-        msgRegis.classList.add ('success');
+        msgRegis.classList.add('success');
         msgRegis.innerHTML = `<h3>Registrasi Berhasil</h3>`;
-        form.submit ();
+        window.location.replace('#/login');
+        form.submit();
       } catch (error) {
-        console.log (error);
+        console.log(error);
       }
     });
-  },
+  }
 };
 
 export default Register;
